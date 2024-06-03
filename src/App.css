@@ -1,16 +1,14 @@
+@keyframes appearing {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
 }
 
 .App-header {
@@ -24,15 +22,76 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.grid {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 3px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.cell {
+  border: 1px solid wheat;
+  color: wheat;
+  font-size: 10vh;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: min(15vh, 30vw);
+  min-width: min(15vh, 30vw);
+}
+
+.signBlock,
+.result {
+  padding: 1vh;
+}
+
+.signText,
+.result {
+  font-size: 6vh;
+  color: wheat;
+  font-weight: bold;
+  padding-right: 1vh;
+}
+
+.signButton,
+.restart {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: wheat;
+  font-size: 7vh;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.selected {
+  text-decoration: underline;
+}
+
+.empty {
+  cursor: pointer;
+}
+
+.point {
+  opacity: 0;
+  animation: appearing 0.5s linear forwards;
+}
+
+.point.computer {
+  animation-delay: 0.5s;
+}
+
+.result {
+  opacity: 0;
+}
+
+.result.visible {
+  animation: appearing 0.5s linear forwards;
+  animation-delay: 1s;
+}
+
+.restart {
+  position: fixed;
+  top: 2vh;
+  right: 2vh;
+
 }
