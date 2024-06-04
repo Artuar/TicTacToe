@@ -1,35 +1,43 @@
-import {Simulate} from "react-dom/test-utils";
-export import playing = Simulate.playing;
-
+// players
 export const computer = "c";
 export const human = "h";
 
+// board types
 export type Point = number | typeof computer | typeof human
 export type Field = [Point,Point,Point,Point,Point,Point,Point,Point,Point]
 
+// board
 export const defaultField: Field = [
   0,1,2,
   3,4,5,
   6,7,8
 ];
 
+// check if player won
 export const isWin = (field: Field, player: typeof computer | typeof human): boolean => {
+  const getPoints = (indexes: number[]) => indexes.map(index => field[index])
   const check = (point: Point) => point === player
-  const topWin = [field[0], field[1], field[2]].every(check);
-  const middleWin = [field[3], field[4], field[5]].every(check);
-  const bottomWin = [field[6], field[7], field[8]].every(check);
-  const leftWin = [field[0], field[3], field[6]].every(check);
-  const centerWin = [field[1], field[4], field[7]].every(check);
-  const rightWin = [field[2], field[5], field[8]].every(check);
-  const leftDiagonalWin = [field[0], field[4], field[8]].every(check);
-  const rightDiagonalWin = [field[2], field[4], field[6]].every(check);
+  // vertical win
+  const topWin = getPoints([0,1,2]).every(check);
+  const middleWin = getPoints([3,4,5]).every(check);
+  const bottomWin = getPoints([6,7,8]).every(check);
+  // horizontal win
+  const leftWin = getPoints([0,3,6]).every(check);
+  const centerWin = getPoints([1,4,7]).every(check);
+  const rightWin = getPoints([2,5,8]).every(check);
+  // diagonal win
+  const leftDiagonalWin = getPoints([0,4,8]).every(check);
+  const rightDiagonalWin = getPoints([2,4,6]).every(check);
+
   return topWin || middleWin || bottomWin || leftWin || centerWin || rightWin || leftDiagonalWin || rightDiagonalWin
 }
 
+// check if board is full
 export const isFullField = (field: Field) => {
   return field.every(point => point === computer || point === human)
 }
 
+// Minimax recursive algorithm to calculate value of a step
 const calculateValue = (position: number, field: Field, player: typeof human | typeof computer, deep: number): number => {
   const expectedField: Field = [ ...field ]
   expectedField[position] = player
@@ -57,6 +65,7 @@ const calculateValue = (position: number, field: Field, player: typeof human | t
   }
 }
 
+// check every possible steps
 const calculatePositionValues = (field: Field, player: typeof human | typeof computer, deep = 0): Record<number, number> => {
   return field.reduce((result: Record<number, number>, point, position) => {
     if (point === computer || point === human) {
@@ -66,6 +75,7 @@ const calculatePositionValues = (field: Field, player: typeof human | typeof com
   }, {})
 }
 
+// choose step with higher scope
 const choseBestPosition = (bestPositions: Record<number, number>): [number, number] => {
   const entries = Object.entries(bestPositions)
 
@@ -77,9 +87,9 @@ const choseBestPosition = (bestPositions: Record<number, number>): [number, numb
   }, [0, -Infinity])
 }
 
+// get next step
 export const getTicTacToeBestStep = (field: Field) => {
   const bestPositions = calculatePositionValues(field, computer)
   const bestPosition = choseBestPosition(bestPositions)
   return { field, bestPosition }
 }
-
