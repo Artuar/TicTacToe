@@ -58,7 +58,7 @@ const calculateValue = (position: number, field: Field, player: typeof human | t
   const nextStep = calculatePositionValues(expectedField, nextPlayer, deep + 1)
   const entries = Object.values(nextStep)
 
-  if (human) {
+  if (nextPlayer === human) {
     return Math.min(...entries)
   } else {
     return Math.max(...entries)
